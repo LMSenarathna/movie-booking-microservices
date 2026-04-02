@@ -4,75 +4,186 @@ const Payment = require("../models/payment");
 
 /**
  * @swagger
- * /api/payments:
- *   post:
- *     summary: Create payment
+ * components:
+ *   schemas:
+ *     Payment:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         bookingId:
+ *           type: string
+ *         customerId:
+ *           type: string
+ *         amount:
+ *           type: number
+ *         currency:
+ *           type: string
+ *         method:
+ *           type: string
+ *         status:
+ *           type: string
+ *         paidAt:
+ *           type: string
+ *           format: date-time
  */
 
-// CREATE
+/**
+ * @swagger
+ * /payments:
+ *   post:
+ *     summary: Create payment
+ *     tags: [Payments]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Payment'
+ *     responses:
+ *       201:
+ *         description: Payment created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 router.post("/", async (req, res) => {
   try {
     const payment = await Payment.create(req.body);
-    res.status(201).json(payment);
+
+    res.status(201).json({
+      message: "Payment created successfully",
+      data: payment
+    });
+
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
 /**
  * @swagger
- * /api/payments:
+ * /payments:
  *   get:
  *     summary: Get all payments
+ *     tags: [Payments]
+ *     responses:
+ *       200:
+ *         description: Payments list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Payment'
  */
-
-// GET ALL
 router.get("/", async (req, res) => {
   try {
-    const payments = await Payment.find().sort({ createdAt: -1 });
-    res.json(payments);
+    const payments = await Payment.find();
+
+    res.json({
+      message: "Payments retrieved successfully",
+      data: payments
+    });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
 /**
  * @swagger
- * /api/payments/{id}:
+ * /payments/{id}:
  *   get:
  *     summary: Get payment by ID
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Payment retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Payment'
  */
-
-// GET BY ID
 router.get("/:id", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id);
+
     if (!payment) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Payment not found" });
     }
-    res.json(payment);
+
+    res.json({
+      message: "Payment retrieved successfully",
+      data: payment
+    });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
 /**
  * @swagger
- * /api/payments/{id}:
+ * /payments/{id}:
  *   put:
- *     summary: Update payment status
+ *     summary: Update payment
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Payment updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Payment'
  */
-
-// UPDATE
 router.put("/:id", async (req, res) => {
   try {
     const payment = await Payment.findById(req.params.id);
 
     if (!payment) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Payment not found" });
     }
 
     payment.status = req.body.status;
+
     if (req.body.status === "Paid") {
       payment.paidAt = new Date();
     }
@@ -81,27 +192,51 @@ router.put("/:id", async (req, res) => {
 
     res.json({
       message: "Payment updated successfully",
-      data: updated,
+      data: updated
     });
+
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
 /**
  * @swagger
- * /api/payments/{id}:
+ * /payments/{id}:
  *   delete:
  *     summary: Delete payment
+ *     tags: [Payments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Payment deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
-
-// DELETE
 router.delete("/:id", async (req, res) => {
   try {
-    await Payment.findByIdAndDelete(req.params.id);
-    res.json({ message: "Payment deleted successfully" });
+    const deleted = await Payment.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    res.json({
+      message: "Payment deleted successfully"
+    });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 

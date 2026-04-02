@@ -280,7 +280,7 @@ const SERVICES = {
 
 // 🎬 Movie Service
 app.use(
-  "/api/movies",
+  "/movies",
   createProxyMiddleware({
     target: SERVICES.movies,
     changeOrigin: true,
@@ -289,7 +289,7 @@ app.use(
 
 // 👤 Customer Service
 app.use(
-  "/api/customers",
+  "/customers",
   createProxyMiddleware({
     target: SERVICES.customers,
     changeOrigin: true,
@@ -307,7 +307,7 @@ app.use(
 
 // 💳 Payment Service
 app.use(
-  "/api/payments",
+  "/payments",
   createProxyMiddleware({
     target: SERVICES.payments,
     changeOrigin: true,
