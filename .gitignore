@@ -22,6 +22,10 @@ dist/
 build/
 coverage/
 
+# Git metadata
+.gitignore
+.gitmodules
+
 # Temporary or local files
 *.tmp
 *.swp
