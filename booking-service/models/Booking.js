@@ -19,4 +19,8 @@ const bookingSchema = new mongoose.Schema({
   },
 });
 
+<<<<<<< HEAD
 module.exports = mongoose.model("Booking", bookingSchema);
+=======
+module.exports = mongoose.model("Booking", bookingSchema);
+>>>>>>> cdb157d (Add booking service and api gateway setup)

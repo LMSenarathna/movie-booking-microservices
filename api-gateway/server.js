@@ -1,6 +1,7 @@
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const swaggerUi = require("swagger-ui-express");
+<<<<<<< HEAD
 const axios = require("axios");
 
 const app = express();
@@ -9,10 +10,20 @@ const app = express();
 const SERVICES = {
   movies:    "http://localhost:5002",
   customers: "http://localhost:5001",
+=======
+
+const app = express();
+
+// ─── Service URLs (each microservice runs on its own port) ────────
+const SERVICES = {
+  movies:    "http://localhost:5001",
+  customers: "http://localhost:5002",
+>>>>>>> cdb157d (Add booking service and api gateway setup)
   bookings:  "http://localhost:5003",
   payments:  "http://localhost:5004",
 };
 
+<<<<<<< HEAD
 // ─── Proxy Routes ─────────────────────────
 
 // 🎬 Movie Service
@@ -130,11 +141,59 @@ app.get("/api-docs", async (req, res, next) => {
 
 // ─── Gateway Info ─────────────────────────
 
+=======
+// ─── Proxy Routes ─────────────────────────────────────────────────
+// All requests to /movies/** → forwarded to Movie Service (port 5001)
+app.use("/movies", createProxyMiddleware({
+  target: SERVICES.movies,
+  changeOrigin: true,
+}));
+
+// All requests to /customers/** → forwarded to Customer Service (port 5002)
+app.use("/customers", createProxyMiddleware({
+  target: SERVICES.customers,
+  changeOrigin: true,
+}));
+
+// All requests to /bookings/** → forwarded to Booking Service (port 5003)
+app.use("/bookings", createProxyMiddleware({
+  target: SERVICES.bookings,
+  changeOrigin: true,
+}));
+
+// All requests to /payments/** → forwarded to Payment Service (port 5004)
+app.use("/payments", createProxyMiddleware({
+  target: SERVICES.payments,
+  changeOrigin: true,
+}));
+
+// ─── Swagger Docs via Gateway ─────────────────────────────────────
+// Forward /booking-service/api-docs to the Booking Service swagger
+app.use("/booking-service/api-docs", createProxyMiddleware({
+  target: SERVICES.bookings,
+  changeOrigin: true,
+  pathRewrite: { "^/booking-service/api-docs": "/api-docs" },
+  on: {
+    proxyRes: (proxyRes) => {
+      // Prevent redirect from breaking the proxy path
+      if (proxyRes.headers.location) {
+        proxyRes.headers.location = proxyRes.headers.location.replace(
+          "/api-docs",
+          "/booking-service/api-docs"
+        );
+      }
+    },
+  },
+}));
+
+// ─── Gateway Info Page ────────────────────────────────────────────
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 app.get("/", (req, res) => {
   res.json({
     service: "API Gateway",
     status: "running",
     routes: {
+<<<<<<< HEAD
       movies:    "http://localhost:5000/api/movies",
       customers: "http://localhost:5000/api/customers",
       bookings:  "http://localhost:5000/bookings",
@@ -156,4 +215,24 @@ const PORT = 5000;
 
 app.listen(PORT, () => {
   console.log(`🌐 API Gateway running on port ${PORT}`);
+=======
+      movies:    "http://localhost:5000/movies",
+      customers: "http://localhost:5000/customers",
+      bookings:  "http://localhost:5000/bookings",
+      payments:  "http://localhost:5000/payments",
+    },
+    swaggerDocs: {
+      bookingService: "http://localhost:5000/booking-service/api-docs",
+    },
+    note: "All microservices are accessible through port 5000 only"
+  });
+});
+
+// ─── Start Gateway ────────────────────────────────────────────────
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`🌐 API Gateway running on port ${PORT}`);
+  console.log(`📡 Routing: /bookings → port 5003, /movies → port 5001, /customers → port 5002, /payments → port 5004`);
+  console.log(`📄 Booking Swagger via Gateway: http://localhost:${PORT}/booking-service/api-docs`);
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 });

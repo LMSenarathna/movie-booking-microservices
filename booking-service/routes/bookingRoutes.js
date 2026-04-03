@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 /*const express = require("express");
+=======
+const express = require("express");
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 const router = express.Router();
 const Booking = require("../models/Booking");
 
@@ -56,7 +60,11 @@ const Booking = require("../models/Booking");
  *       500:
  *         description: Server error
  */
+<<<<<<< HEAD
 /*router.post("/", async (req, res) => {
+=======
+router.post("/", async (req, res) => {
+>>>>>>> cdb157d (Add booking service and api gateway setup)
   try {
     const booking = new Booking(req.body);
     const savedBooking = await booking.save();
@@ -84,7 +92,11 @@ const Booking = require("../models/Booking");
  *       500:
  *         description: Server error
  */
+<<<<<<< HEAD
 /*router.get("/", async (req, res) => {
+=======
+router.get("/", async (req, res) => {
+>>>>>>> cdb157d (Add booking service and api gateway setup)
   try {
     const bookings = await Booking.find();
     res.json(bookings);
@@ -118,7 +130,11 @@ const Booking = require("../models/Booking");
  *       500:
  *         description: Server error
  */
+<<<<<<< HEAD
 /*router.get("/:id", async (req, res) => {
+=======
+router.get("/:id", async (req, res) => {
+>>>>>>> cdb157d (Add booking service and api gateway setup)
   try {
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
@@ -151,7 +167,11 @@ const Booking = require("../models/Booking");
  *       500:
  *         description: Server error
  */
+<<<<<<< HEAD
 /*router.delete("/:id", async (req, res) => {
+=======
+router.delete("/:id", async (req, res) => {
+>>>>>>> cdb157d (Add booking service and api gateway setup)
   try {
     const booking = await Booking.findByIdAndDelete(req.params.id);
     if (!booking) {
@@ -163,6 +183,7 @@ const Booking = require("../models/Booking");
   }
 });
 
+<<<<<<< HEAD
 module.exports = router;*/
 
 
@@ -311,3 +332,6 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
+=======
+module.exports = router;
+>>>>>>> cdb157d (Add booking service and api gateway setup)

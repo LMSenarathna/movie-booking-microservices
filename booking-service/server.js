@@ -1,5 +1,9 @@
 // booking-service/server.js
+<<<<<<< HEAD
 /*const express = require("express");
+=======
+const express = require("express");
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bookingRoutes = require("./routes/bookingRoutes");
@@ -39,10 +43,13 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+<<<<<<< HEAD
 app.get("/api-docs-json", (req, res) => {
   res.json(swaggerSpec);
 });
 
+=======
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 // ─── Routes ───────────────────────────────────────────────────────
 app.use("/bookings", bookingRoutes);
 
@@ -56,6 +63,7 @@ const PORT = process.env.PORT || 5003;
 app.listen(PORT, () => {
   console.log(`🚀 Booking Service running on port ${PORT}`);
   console.log(`📄 Swagger Docs: http://localhost:${PORT}/api-docs`);
+<<<<<<< HEAD
 });*/
 
 
@@ -113,4 +121,6 @@ const PORT = process.env.PORT || 5003;
 
 app.listen(PORT, () => {
   console.log(`🚀 Booking running on port ${PORT}`);
+=======
+>>>>>>> cdb157d (Add booking service and api gateway setup)
 });
